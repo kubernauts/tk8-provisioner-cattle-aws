@@ -13,8 +13,8 @@ resource "aws_vpc" "rancher-vpc" {
 
   tags = "${
     map(
-     "Name", "${var.rancher_cluster_name}-rancher-vpc",
-     "kubernetes.io/cluster/${random_string.cluster_id.result}", "owned",
+      "Name", "${var.rancher_cluster_name}-rancher-vpc",
+      "kubernetes.io/cluster/${random_string.cluster_id.result}", "owned",
     )
   }"
 }
@@ -29,8 +29,8 @@ resource "aws_subnet" "rancher-subnet" {
   vpc_id            = "${aws_vpc.rancher-vpc.id}"
   tags = "${
     map(
-     "Name", "${var.rancher_cluster_name}-rancher",
-     "kubernetes.io/cluster/${random_string.cluster_id.result}", "owned",
+      "Name", "${var.rancher_cluster_name}-rancher",
+      "kubernetes.io/cluster/${random_string.cluster_id.result}", "owned",
     )
   }"
 }

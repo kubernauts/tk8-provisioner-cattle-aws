@@ -2,9 +2,16 @@ locals {
   create_ing_rules = "${var.existing_vpc ? 0 : 1}"
 }
 
+resource "random_string" "sg_random_string" {
+  upper            = false
+  length           = 8
+  special          = false
+  override_special = "/@\" "
+}
+
 resource "aws_security_group" "rancher_security_group" {
   count       = "${var.security_group_name != "" ? 0 : 1}"
-  name        = "rancher-sg-1"
+  name        = "rancher-sg-${random_string.sg_random_string.result}"
   description = "Allow inbound/outbound traffic for rancher"
   vpc_id      = "${aws_vpc.rancher-vpc.id}"
 
@@ -15,7 +22,7 @@ resource "aws_security_group" "rancher_security_group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags {
+  tags = {
     "${random_string.cluster_id.result}" = "owned"
   }
 }
