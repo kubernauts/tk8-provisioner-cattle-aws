@@ -36,6 +36,7 @@ type CattleAWSConfig struct {
 	WorkerQuantity           string
 	IAMInstanceProfile       string
 	IAMInstanceProfileWorker string
+	RootDiskSize             string
 }
 
 func GetCattleAWSConfig() CattleAWSConfig {
@@ -62,6 +63,7 @@ func GetCattleAWSConfig() CattleAWSConfig {
 		WorkerQuantity:           viper.GetString("cattle-aws.worker_node_pool.quantity"),
 		IAMInstanceProfile:       viper.GetString("cattle-aws.iam_instance_profile_name"),
 		IAMInstanceProfileWorker: viper.GetString("cattle-aws.iam_instance_profile_worker"),
+		RootDiskSize:             viper.GetString("cattle-aws.root_disk_size"),
 	}
 }
 

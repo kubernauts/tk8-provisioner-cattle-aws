@@ -26,4 +26,5 @@ module "cattle-aws" {
   AWS_DEFAULT_REGION                         = "${var.AWS_DEFAULT_REGION}"
   iam_instance_profile_name                  = "${var.iam_instance_profile_name}"
   iam_instance_profile_name_worker           = "${var.iam_instance_profile_name_worker}"
+  root_disk_size                             = "${var.root_disk_size}"
 }

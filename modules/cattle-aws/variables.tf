@@ -141,3 +141,9 @@ variable "iam_instance_profile_name_worker" {
   description = "IAM instance profile name for worker"
   type        = "string"
 }
+
+variable "root_disk_size" {
+  default     = ""
+  description = "Root disk size in GB"
+  type        = "string"
+}

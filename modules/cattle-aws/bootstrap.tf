@@ -32,12 +32,13 @@ resource "rancher2_node_template" "rancher_existing_vpc" {
     zone                 = ""
     iam_instance_profile = "${var.iam_instance_profile_name}"
     instance_type        = "${var.instance_type}"
+    root_size            = "${var.root_disk_size}"
   }
 }
 
 # Create a new rancher2 Node Template
 resource "rancher2_node_template" "rancher_no_existing_vpc" {
-  count               = "${!var.existing_vpc ? 1 : 0}"
+  count               = "${! var.existing_vpc ? 1 : 0}"
   name                = "${var.rancher_cluster_name}_node_template"
   description         = "${var.rancher_cluster_name}_node_template node template"
   cloud_credential_id = "${rancher2_cloud_credential.test.id}"
@@ -53,6 +54,7 @@ resource "rancher2_node_template" "rancher_no_existing_vpc" {
     zone                 = ""
     iam_instance_profile = "${aws_iam_instance_profile.rancher_controlplane_profile.name}"
     instance_type        = "${var.instance_type}"
+    root_size            = "${var.root_disk_size}"
   }
 }
 
@@ -71,7 +73,7 @@ resource "rancher2_node_pool" "rancher_overlap" {
 }
 
 resource "rancher2_node_pool" "rancher_overlap_no_existing_vpc" {
-  count           = "${var.overlap_cp_etcd_worker && !var.existing_vpc ? 1 : 0}"
+  count           = "${var.overlap_cp_etcd_worker && ! var.existing_vpc ? 1 : 0}"
   cluster_id      = "${rancher2_cluster.rancher-custom.id}"
   name            = "${var.rancher_cluster_name}-node-pool"
   hostname_prefix = "${var.overlap_node_pool_hostname_prefix}"
@@ -84,7 +86,7 @@ resource "rancher2_node_pool" "rancher_overlap_no_existing_vpc" {
 }
 
 resource "rancher2_node_template" "rancher_worker_existing_vpc_no_overlap" {
-  count               = "${!var.overlap_cp_etcd_worker && var.existing_vpc ? 1 : 0}"
+  count               = "${! var.overlap_cp_etcd_worker && var.existing_vpc ? 1 : 0}"
   name                = "${var.rancher_cluster_name}_worker_node_template"
   description         = "${var.rancher_cluster_name}_worker_node_template node template"
   cloud_credential_id = "${rancher2_cloud_credential.test.id}"
@@ -103,7 +105,7 @@ resource "rancher2_node_template" "rancher_worker_existing_vpc_no_overlap" {
 }
 
 resource "rancher2_node_template" "rancher_worker_no_existing_vpc_no_overlap" {
-  count               = "${!var.overlap_cp_etcd_worker && !var.existing_vpc ? 1 : 0}"
+  count               = "${! var.overlap_cp_etcd_worker && ! var.existing_vpc ? 1 : 0}"
   name                = "${var.rancher_cluster_name}_worker_node_template"
   description         = "${var.rancher_cluster_name}_worker_node_template node template"
   cloud_credential_id = "${rancher2_cloud_credential.test.id}"
@@ -123,7 +125,7 @@ resource "rancher2_node_template" "rancher_worker_no_existing_vpc_no_overlap" {
 
 # Create a new rancher2 master Node Pool
 resource "rancher2_node_pool" "rancher_master_existing_vpc" {
-  count           = "${!var.overlap_cp_etcd_worker && var.existing_vpc ? 1 : 0}"
+  count           = "${! var.overlap_cp_etcd_worker && var.existing_vpc ? 1 : 0}"
   cluster_id      = "${rancher2_cluster.rancher-custom.id}"
   name            = "${var.rancher_cluster_name}-master-node-pool"
   hostname_prefix = "${var.no_overlap_nodepool_master_hostname_prefix}"
@@ -139,7 +141,7 @@ resource "rancher2_node_pool" "rancher_master_existing_vpc" {
 }
 
 resource "rancher2_node_pool" "foo_master_no_existing_vpc" {
-  count           = "${!var.overlap_cp_etcd_worker && !var.existing_vpc ? 1 : 0}"
+  count           = "${! var.overlap_cp_etcd_worker && ! var.existing_vpc ? 1 : 0}"
   cluster_id      = "${rancher2_cluster.rancher-custom.id}"
   name            = "${var.rancher_cluster_name}-master-node-pool"
   hostname_prefix = "${var.no_overlap_nodepool_master_hostname_prefix}"
@@ -155,7 +157,7 @@ resource "rancher2_node_pool" "foo_master_no_existing_vpc" {
 }
 
 resource "rancher2_node_pool" "foo_worker_no_overlap_existing_vpc" {
-  count            = "${!var.overlap_cp_etcd_worker && var.existing_vpc ? 1 : 0}"
+  count            = "${! var.overlap_cp_etcd_worker && var.existing_vpc ? 1 : 0}"
   cluster_id       = "${rancher2_cluster.rancher-custom.id}"
   name             = "${var.rancher_cluster_name}-worker-node-pool"
   hostname_prefix  = "${var.no_overlap_nodepool_worker_hostname_prefix}"
@@ -167,7 +169,7 @@ resource "rancher2_node_pool" "foo_worker_no_overlap_existing_vpc" {
 }
 
 resource "rancher2_node_pool" "foo_worker_no_overlap_no_existing_vpc" {
-  count           = "${!var.overlap_cp_etcd_worker && !var.existing_vpc ? 1 : 0}"
+  count           = "${! var.overlap_cp_etcd_worker && ! var.existing_vpc ? 1 : 0}"
   cluster_id      = "${rancher2_cluster.rancher-custom.id}"
   name            = "${var.rancher_cluster_name}-worker-node-pool"
   hostname_prefix = "${var.no_overlap_nodepool_worker_hostname_prefix}"
