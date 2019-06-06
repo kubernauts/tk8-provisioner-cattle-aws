@@ -26,7 +26,7 @@ resource "aws_subnet" "rancher-subnet" {
 
   availability_zone = "${data.aws_availability_zones.available.names[count.index]}"
   cidr_block        = "10.0.${count.index}.0/24"
-  vpc_id            = "${aws_vpc.rancher-vpc.id}"
+  vpc_id            = aws_vpc.rancher-vpc[count.index].id
   tags = "${
     map(
       "Name", "${var.rancher_cluster_name}-rancher",
@@ -36,29 +36,29 @@ resource "aws_subnet" "rancher-subnet" {
 }
 
 resource "aws_internet_gateway" "rancher-ig" {
-  count  = "${var.existing_vpc ? 0 : 1}"
-  vpc_id = "${aws_vpc.rancher-vpc.id}"
+  count  = var.existing_vpc ? 0 : 1
+  vpc_id = aws_vpc.rancher-vpc[count.index].id
 
-  tags {
+  tags = {
     Name = "${var.rancher_cluster_name}-rancher-igw"
   }
 }
 
 resource "aws_route_table" "rancher-rt" {
-  count  = "${var.existing_vpc ? 0 : 1}"
-  vpc_id = "${aws_vpc.rancher-vpc.id}"
+  count  = var.existing_vpc ? 0 : 1
+  vpc_id = aws_vpc.rancher-vpc[count.index].id
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = "${aws_internet_gateway.rancher-ig.id}"
+    gateway_id = aws_internet_gateway.rancher-ig[count.index].id
   }
 }
 
 resource "aws_route_table_association" "rancher-rta" {
-  count = "${var.existing_vpc ? 0 : 1}"
+  count = var.existing_vpc ? 0 : 1
 
   #count = 1
 
-  subnet_id      = "${aws_subnet.rancher-subnet.*.id[count.index]}"
-  route_table_id = "${aws_route_table.rancher-rt.id}"
+  subnet_id      = aws_subnet.rancher-subnet.*.id[count.index]
+  route_table_id = aws_route_table.rancher-rt[count.index].id
 }

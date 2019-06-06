@@ -177,7 +177,25 @@ func Reset() {
 // 	log.Println("Successfully removed cattle-aws cluster")
 // }
 
-func Destroy() {
+func CattleDestroy() {
 	log.Println("starting terraform destroy")
-	provisioner.ExecuteTerraform("destroy", "./inventory/"+common.Name+"/provisioner/")
+	//provisioner.ExecuteTerraform("destroy", "./inventory/"+common.Name+"/provisioner/")
+	terrSet := exec.Command("terraform", "destroy", "-auto-approve")
+	terrSet.Dir = "./inventory/" + common.Name + "/provisioner/"
+	stdout, err := terrSet.StdoutPipe()
+	if err != nil {
+		log.Fatal(err)
+	}
+	scanner := bufio.NewScanner(stdout)
+	go func() {
+		for scanner.Scan() {
+			fmt.Println(scanner.Text())
+		}
+	}()
+	if err := terrSet.Start(); err != nil {
+		log.Fatal(err)
+	}
+	if err := terrSet.Wait(); err != nil {
+		log.Fatal(err)
+	}
 }

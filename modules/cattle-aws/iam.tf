@@ -22,21 +22,21 @@ resource "aws_iam_policy" "rancher_controlplane_policy" {
 resource "aws_iam_policy_attachment" "rancher-controlplane-attachment" {
   count      = "${! var.existing_vpc ? 1 : 0}"
   name       = "rancher-controlplane-attachment"
-  roles      = ["${aws_iam_role.rancher_controlplane_role.name}"]
-  policy_arn = "${aws_iam_policy.rancher_controlplane_policy.arn}"
+  roles      = [aws_iam_role.rancher_controlplane_role["0"].name]
+  policy_arn = aws_iam_policy.rancher_controlplane_policy[count.index].arn
 }
 
 resource "aws_iam_instance_profile" "rancher_controlplane_profile" {
-  count = "${! var.existing_vpc ? 1 : 0}"
+  count = ! var.existing_vpc ? 1 : 0
   name  = "rancher_controlplane_profile_${random_string.iam_random_string.result}"
-  role  = "${aws_iam_role.rancher_controlplane_role.name}"
+  role  = aws_iam_role.rancher_controlplane_role["0"].name
 }
 
 # Rancher worker iam role
 resource "aws_iam_role" "rancher_worker_role" {
   count              = "${! var.existing_vpc ? 1 : 0}"
   name               = "rancher_worker_role_${random_string.iam_random_string.result}"
-  assume_role_policy = "${file("${path.module}/assumerolepolicy.json")}"
+  assume_role_policy = file("${path.module}/assumerolepolicy.json")
 }
 
 resource "aws_iam_policy" "rancher_worker_policy" {
@@ -49,12 +49,12 @@ resource "aws_iam_policy" "rancher_worker_policy" {
 resource "aws_iam_policy_attachment" "rancher-worker-attachment" {
   count      = "${! var.existing_vpc ? 1 : 0}"
   name       = "rancher-worker-attachment"
-  roles      = ["${aws_iam_role.rancher_worker_role.name}"]
-  policy_arn = "${aws_iam_policy.rancher_worker_policy.arn}"
+  roles      = [aws_iam_role.rancher_worker_role[count.index].name]
+  policy_arn = aws_iam_policy.rancher_worker_policy[count.index].arn
 }
 
 resource "aws_iam_instance_profile" "rancher_worker_profile" {
-  count = "${! var.existing_vpc ? 1 : 0}"
+  count = ! var.existing_vpc ? 1 : 0
   name  = "rancher_worker_profile_${random_string.iam_random_string.result}"
-  role  = "${aws_iam_role.rancher_worker_role.name}"
+  role  = aws_iam_role.rancher_worker_role[count.index].name
 }

@@ -96,7 +96,7 @@ func (p CATTLEAWS) Upgrade(args []string) {
 
 func (p CATTLEAWS) Destroy(args []string) {
 	// teardown complete infra
-	cluster.Destroy()
+	cluster.CattleDestroy()
 }
 
 func NewCattleAWS() provisioner.Provisioner {

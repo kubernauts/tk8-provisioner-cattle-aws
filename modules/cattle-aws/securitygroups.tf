@@ -13,7 +13,7 @@ resource "aws_security_group" "rancher_security_group" {
   count       = "${var.security_group_name != "" ? 0 : 1}"
   name        = "rancher-sg-${random_string.sg_random_string.result}"
   description = "Allow inbound/outbound traffic for rancher"
-  vpc_id      = "${aws_vpc.rancher-vpc.id}"
+  vpc_id      = aws_vpc.rancher-vpc[count.index].id
 
   egress {
     from_port   = 0
@@ -36,7 +36,7 @@ resource "aws_security_group_rule" "ingress_rule" {
   self      = true
 
   #cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = "${aws_security_group.rancher_security_group.id}"
+  security_group_id = aws_security_group.rancher_security_group["0"].id
 }
 
 resource "aws_security_group_rule" "ingress_rule1" {
@@ -48,7 +48,7 @@ resource "aws_security_group_rule" "ingress_rule1" {
   self      = true
 
   #cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = "${aws_security_group.rancher_security_group.id}"
+  security_group_id = aws_security_group.rancher_security_group["0"].id
 }
 
 resource "aws_security_group_rule" "ingress_world" {
@@ -60,7 +60,7 @@ resource "aws_security_group_rule" "ingress_world" {
   from_port   = "${element(var.aws_rancher_sg_ing_defaults, count.index)}"
   to_port     = "${element(var.aws_rancher_sg_ing_defaults, count.index)}"
 
-  security_group_id = "${aws_security_group.rancher_security_group.id}"
+  security_group_id = aws_security_group.rancher_security_group["0"].id
 }
 
 resource "aws_security_group_rule" "ingress_self" {
@@ -72,7 +72,7 @@ resource "aws_security_group_rule" "ingress_self" {
   from_port = "${element(split(",", var.aws_rancher_sg_ing_self1["from"]), count.index)}"
   to_port   = "${element(split(",", var.aws_rancher_sg_ing_self1["to"]), count.index)}"
 
-  security_group_id = "${aws_security_group.rancher_security_group.id}"
+  security_group_id = aws_security_group.rancher_security_group["0"].id
 }
 
 resource "aws_security_group_rule" "ingress_nodeport_svc" {
@@ -84,5 +84,5 @@ resource "aws_security_group_rule" "ingress_nodeport_svc" {
   from_port   = "${element(split(",", var.aws_rancher_sg_ing_nodeport["from"]), count.index)}"
   to_port     = "${element(split(",", var.aws_rancher_sg_ing_nodeport["to"]), count.index)}"
 
-  security_group_id = "${aws_security_group.rancher_security_group.id}"
+  security_group_id = aws_security_group.rancher_security_group["0"].id
 }
