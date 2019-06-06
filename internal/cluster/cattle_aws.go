@@ -130,8 +130,24 @@ func Upgrade() {
 		}
 	}
 	log.Println("Starting Upgrade of the existing cluster")
-	provisioner.ExecuteTerraform("apply", "./inventory/"+common.Name+"/provisioner/")
-
+	terrSet := exec.Command("terraform", "apply", "-auto-approve")
+	terrSet.Dir = "./inventory/" + common.Name + "/provisioner/"
+	stdout, err := terrSet.StdoutPipe()
+	if err != nil {
+		log.Fatal(err)
+	}
+	scanner := bufio.NewScanner(stdout)
+	go func() {
+		for scanner.Scan() {
+			fmt.Println(scanner.Text())
+		}
+	}()
+	if err := terrSet.Start(); err != nil {
+		log.Fatal(err)
+	}
+	if err := terrSet.Wait(); err != nil {
+		log.Fatal(err)
+	}
 }
 
 // Reset is used to reset the  Kubernetes Cluster back to rollout on the infrastructure.
