@@ -2,8 +2,6 @@
 
 Using cattle-aws provisioner with TK8
 
-Provisioner repository: https://github.com/kubernauts/tk8-provisioner-cattle-aws
-
 ## Introduction:
 
 The TK8’s new cattle-aws provisioner uses the Terraform’s Rancher2 Provider for creating a Kubernetes cluster on AWS via Rancher resources.
@@ -162,7 +160,7 @@ cattle-aws:
    worker_node_pool:
       hostname_prefix: "cattle-aws-worker"
       quantity: 1
-```bash
+```
 
 ## Cattle AWS Deplyoment
 
