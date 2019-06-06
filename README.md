@@ -162,7 +162,7 @@ cattle-aws:
       quantity: 1
 ```
 
-## Cattle AWS Deplyoment
+## Cattle AWS Deployment
 
 0. Build the tk8 binary and place it in you path
 1. Clone `tk8` repo, switch to `cattle-aws` provisioner.
