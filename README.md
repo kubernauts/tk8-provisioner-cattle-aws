@@ -164,7 +164,7 @@ cattle-aws:
 
 ## Cattle AWS Deployment
 
-0. Build the tk8 binary and place it in you path
+0. Build the tk8 binary and place it in your path (go get -u github.com/kubernauts/tk8)
 1. Clone `tk8` repo, switch to `cattle-aws` provisioner.
 2. Set ENV vars
 3. Use a config.yaml from example above
