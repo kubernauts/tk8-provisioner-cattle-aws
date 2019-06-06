@@ -6,11 +6,11 @@ import (
 	"os"
 	"os/exec"
 
+	"bufio"
 	"github.com/kubernauts/tk8/pkg/common"
 	"github.com/kubernauts/tk8/pkg/provisioner"
 	"github.com/kubernauts/tk8/pkg/templates"
 	"github.com/spf13/viper"
-	"bufio"
 )
 
 type cattleAWSDistOS struct {
@@ -77,8 +77,6 @@ func cattleAWSPrepareConfigFiles(InstanceOS string, Name string) {
 	fmt.Println(InstanceOS)
 	templates.ParseTemplate(templates.VariablesCattleAWS, "./inventory/"+common.Name+"/provisioner/variables.tf", GetCattleAWSConfig())
 	templates.ParseTemplate(templates.DistVariablesCattleAWS, "./inventory/"+common.Name+"/provisioner/modules/cattle-aws/distos.tf", cattleAWSDistOSMap[InstanceOS])
-	templates.ParseTemplate(templates.Credentials, "./inventory/"+common.Name+"/provisioner/credentials.tfvars", common.GetCredentials())
-
 }
 
 // Install is used to setup the Kubernetes Cluster with RKE
@@ -118,7 +116,6 @@ func Install() {
 	}
 
 	//provisioner.ExecuteTerraform("apply", "./inventory/"+common.Name+"/provisioner/")
-
 
 	log.Println("Voila! Kubernetes cluster is provisioned in Rancher. Please check the further details about the cluster in Rancher GUI")
 
