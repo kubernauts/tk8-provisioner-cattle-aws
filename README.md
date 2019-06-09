@@ -24,6 +24,7 @@ The following environment variables need to be set up:
 * `TF_VAR_rancher_secret_key` - Rancher secret key
 * `TF_VAR_AWS_ACCESS_KEY_ID` - AWS access key
 * `TF_VAR_AWS_SECRET_ACCESS_KEY` - AWS secret key
+* `TF_VAR_AWS_DEFAULT_REGION` - AWS default region
 * `AWS_DEFAULT_REGION` - Required for provisioner
 * `AWS_ACCESS_KEY_ID` - AWS access key
 * `AWS_SECRET_ACCESS_KEY` - AWS secret key
