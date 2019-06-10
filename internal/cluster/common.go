@@ -37,6 +37,8 @@ type CattleAWSConfig struct {
 	IAMInstanceProfile       string
 	IAMInstanceProfileWorker string
 	RootDiskSize             string
+	RequestSpotInstances     bool
+	SpotPrice                string
 }
 
 func GetCattleAWSConfig() CattleAWSConfig {
@@ -64,6 +66,8 @@ func GetCattleAWSConfig() CattleAWSConfig {
 		IAMInstanceProfile:       viper.GetString("cattle-aws.iam_instance_profile_name"),
 		IAMInstanceProfileWorker: viper.GetString("cattle-aws.iam_instance_profile_worker"),
 		RootDiskSize:             viper.GetString("cattle-aws.root_disk_size"),
+		RequestSpotInstances:     viper.GetBool("cattle-aws.request_spot_instances"),
+		SpotPrice:                viper.GetString("cattle-aws.spot_price"),
 	}
 }
 

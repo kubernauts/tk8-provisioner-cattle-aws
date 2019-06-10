@@ -1,3 +1,15 @@
+variable "request_spot_instances" {
+  default     = false
+  description = "Request spot instances for the node template"
+  type        = string
+}
+
+variable "spot_price" {
+  default     = ""
+  description = "Spot instances price for node template"
+  type        = string
+}
+
 variable "root_disk_size" {
   default     = "20"
   description = "Root disk size for instances in GB"

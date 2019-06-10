@@ -27,5 +27,7 @@ module "cattle-aws" {
   iam_instance_profile_name                  = var.iam_instance_profile_name
   iam_instance_profile_name_worker           = var.iam_instance_profile_name_worker
   root_disk_size                             = var.root_disk_size
+  request_spot_instances                     = var.request_spot_instances
+  spot_price                                 = var.spot_price
 }
 

@@ -147,3 +147,14 @@ variable "root_disk_size" {
   description = "Root disk size in GB"
   type        = "string"
 }
+
+variable "request_spot_instances" {
+  description = "Request spot instances for the node template"
+  type        = string
+}
+
+variable "spot_price" {
+  default     = ""
+  description = "Spot instances price for node template"
+  type        = string
+}
