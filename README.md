@@ -39,6 +39,8 @@ Example `config.yaml`:
 
 ```bash
 cattle-aws:
+   request_spot_instances: # If you want to request spot instances. Set to true/false/empty
+   spot_price: # The spot instance price you want to bid. Ex. "0.75"
    root_disk_size: 20
    iam_instance_profile_name: "rancher-controlplane-role"
    iam_instance_profile_worker: # specify if overlap_cp_etcd_worker is false and existing_vpc is true
@@ -72,6 +74,8 @@ Example `config.yaml`:
 
 ```bash
 cattle-aws:
+   request_spot_instances: # If you want to request spot instances. Set to true/false/empty
+   spot_price: # The spot instance price you want to bid. Ex. "0.75"
    root_disk_size: 20
    iam_instance_profile_name: "rancher-controlplane-role"
    iam_instance_profile_worker: “rancher-worker-role”
@@ -105,6 +109,8 @@ Example `config.yaml`:
 
 ```bash
 cattle-aws:
+   request_spot_instances: # If you want to request spot instances. Set to true/false/empty
+   spot_price: # The spot instance price you want to bid. Ex. "0.75"
    root_disk_size: 20
    iam_instance_profile_name: "rancher-controlplane-role"
    iam_instance_profile_worker: # specify if overlap_cp_etcd_worker is false and existing_vpc is true
@@ -138,6 +144,8 @@ Example `config.yaml`:
 
 ```bash
 cattle-aws:
+   request_spot_instances: # If you want to request spot instances. Set to true/false/empty
+   spot_price: # The spot instance price you want to bid. Ex. "0.75"
    root_disk_size: 20
    iam_instance_profile_name: "rancher-controlplane-role"
    iam_instance_profile_worker: # specify if overlap_cp_etcd_worker is false and existing_vpc is true
@@ -175,6 +183,10 @@ cattle-aws:
 4. Run `tk8 cluster install cattle-aws`.
 
 ## Field Reference:
+
+* `request_spot_instances`: If you want to use spot instances for the cluster. Possible values: `true`,`false`. 
+
+* `spot_price`: The spot instance bidding price. For example: "0.75". Specify this along with `request_spot_instances` to use spot instances for the cluster.
 
 * `root_disk_size`: Root disk size for instances.
 
@@ -225,3 +237,18 @@ cattle-aws:
     * `hostname_prefix`: (Required). This field is required to be set if you want to create an overlapped node pool. The hostname prefix’s value can be any `string`.
 
     * `quantity`: (Required). This field is required to be set if you want to create an overlapped node pool. The possible value for this field is of `numeric` type. 	
+    
+    
+## Spot Instance Usage Caveats:
+While the use of spot instances is possible, TK8 uses the following conventions on where the spot instances will be used if `request_spot_instances` and `spot_price` are set:
+
+* Spot instances can be used for:
+    * For worker nodes
+    * For overlapped nodes, i.e. all nodes acting as `controlplane`, `etcd`, and `worker`
+* Spot instances cannot be used for:
+    * Node templates which will be used for creating a separate master node pool. In simple words, if you have `overlap_cp_etcd_worker` as `false` and are using spot instances, the spot instances will be used only for worker nodes and not master nodes. 
+
+### Reasoning:
+In the past we have seen that sometimes when a particular instance type in a particular region is requested to the user, AWS can throw unexpected errors like `capacity-oversubscribed`. In case of such errors, in worst case scenarios, if all the masters go down and AWS was not able to provide at least one spot instance, then we'll have an issue at our hands. That is why we have decided to not allow use of `spot instances` for master-only node pools.
+
+If anyone from the community have a better reasoning to allow usage of spot instances for master-only nodes, please file an issue. We'll discuss the issues and see if we can make a better choice than this.
