@@ -51,7 +51,7 @@ variable "os" {
   type        = "string"
 }
 
-variable "instance_type" {
+variable "worker_instance_type" {
   description = "Instance type"
   type        = "string"
 }
@@ -157,4 +157,22 @@ variable "spot_price" {
   default     = ""
   description = "Spot instances price for node template"
   type        = string
+}
+
+variable "controlplane_instance_type" {
+  default     = ""
+  description = "Controlplane instance type"
+  type        = "string"
+}
+
+variable "ami_id" {
+  default     = ""
+  description = "AMI id for the instance"
+  type        = "string"
+}
+
+variable "cloudwatch_monitoring" {
+  default     = ""
+  description = "Enable/Disable cloudwatch monitoring for instances"
+  type        = "string"
 }

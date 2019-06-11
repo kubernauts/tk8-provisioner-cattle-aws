@@ -26,7 +26,7 @@ type CattleAWSConfig struct {
 	SubnetID                 string
 	SecurityGroupName        string
 	OS                       string
-	InstanceType             string
+	WorkerInstanceType       string
 	OverlapCpEtcdWorker      bool
 	OverlapHostnamePrefix    string
 	OverlapQuantity          string
@@ -39,6 +39,9 @@ type CattleAWSConfig struct {
 	RootDiskSize             string
 	RequestSpotInstances     bool
 	SpotPrice                string
+	ControlPlaneInstanceType string
+	AmiID                    string
+	CloudwatchMonitoring     bool
 }
 
 func GetCattleAWSConfig() CattleAWSConfig {
@@ -55,7 +58,7 @@ func GetCattleAWSConfig() CattleAWSConfig {
 		SubnetID:                 viper.GetString("cattle-aws.subnet_id"),
 		SecurityGroupName:        viper.GetString("cattle-aws.security_group_name"),
 		OS:                       viper.GetString("cattle-aws.os"),
-		InstanceType:             viper.GetString("cattle-aws.instance_type"),
+		WorkerInstanceType:       viper.GetString("cattle-aws.worker_instance_type"),
 		OverlapCpEtcdWorker:      viper.GetBool("cattle-aws.overlap_cp_etcd_worker"),
 		OverlapHostnamePrefix:    viper.GetString("cattle-aws.overlap_node_pool.hostname_prefix"),
 		OverlapQuantity:          viper.GetString("cattle-aws.overlap_node_pool.quantity"),
@@ -68,6 +71,9 @@ func GetCattleAWSConfig() CattleAWSConfig {
 		RootDiskSize:             viper.GetString("cattle-aws.root_disk_size"),
 		RequestSpotInstances:     viper.GetBool("cattle-aws.request_spot_instances"),
 		SpotPrice:                viper.GetString("cattle-aws.spot_price"),
+		ControlPlaneInstanceType: viper.GetString("cattle-aws.controlplane_instance_type"),
+		AmiID:                    viper.GetString("cattle-aws.ami_id"),
+		CloudwatchMonitoring:     viper.GetBool("cattle-aws.cloudwatch_monitoring"),
 	}
 }
 

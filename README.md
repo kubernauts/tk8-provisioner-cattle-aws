@@ -39,8 +39,9 @@ Example `config.yaml`:
 
 ```bash
 cattle-aws:
-   request_spot_instances: # If you want to request spot instances. Set to true/false/empty
-   spot_price: # The spot instance price you want to bid. Ex. "0.75"
+   request_spot_instances: false
+   spot_price:
+   cloudwatch_monitoring: false
    root_disk_size: 20
    iam_instance_profile_name: "rancher-controlplane-role"
    iam_instance_profile_worker: # specify if overlap_cp_etcd_worker is false and existing_vpc is true
@@ -54,8 +55,10 @@ cattle-aws:
    vpc_id: "vpc-1abcdgggga72a691a"
    subnet_id: "subnet-1f98d368767ge1e71"
    security_group_name: "rancher-nodes"
-   os: "ubuntu"
-   instance_type: "t2.medium"
+   ami_id: "test123" # specify if you know the specific AMI ID. If used, keep below os field empty (not that setting it would impact).
+   os: "" # specify the OS. Supported values: ubuntu, centos, coreos. Keep above field empty if this is being used.
+   controlplane_instance_type: "t2.medium"
+   worker_instance_type: "t2.large"
    overlap_cp_etcd_worker: "true"
    overlap_node_pool:
       hostname_prefix: "cattle-aws-cluster"
@@ -74,8 +77,9 @@ Example `config.yaml`:
 
 ```bash
 cattle-aws:
-   request_spot_instances: # If you want to request spot instances. Set to true/false/empty
-   spot_price: # The spot instance price you want to bid. Ex. "0.75"
+   request_spot_instances: false
+   spot_price:
+   cloudwatch_monitoring: false
    root_disk_size: 20
    iam_instance_profile_name: "rancher-controlplane-role"
    iam_instance_profile_worker: “rancher-worker-role”
@@ -89,8 +93,10 @@ cattle-aws:
    vpc_id: "vpc-1abcdgggga72a691a"
    subnet_id: "subnet-1f98d368767ge1e71"
    security_group_name: "rancher-nodes"
-   os: "ubuntu"
-   instance_type: "t2.medium"
+   ami_id: "test123" # specify if you know the specific AMI ID. If used, keep below os field empty (not that setting it would impact).
+   os: "ubuntu" # specify the OS. Supported values: ubuntu, centos, coreos. Keep above field empty if this is being used.
+   controlplane_instance_type: "t2.medium"
+   worker_instance_type: "t2.large"
    overlap_cp_etcd_worker: "false"
    overlap_node_pool:
       hostname_prefix:
@@ -109,8 +115,9 @@ Example `config.yaml`:
 
 ```bash
 cattle-aws:
-   request_spot_instances: # If you want to request spot instances. Set to true/false/empty
-   spot_price: # The spot instance price you want to bid. Ex. "0.75"
+   request_spot_instances: false
+   spot_price:
+   cloudwatch_monitoring: false
    root_disk_size: 20
    iam_instance_profile_name: "rancher-controlplane-role"
    iam_instance_profile_worker: # specify if overlap_cp_etcd_worker is false and existing_vpc is true
@@ -124,8 +131,10 @@ cattle-aws:
    vpc_id:
    subnet_id:
    security_group_name:
-   os: "ubuntu"
-   instance_type: "t2.medium"
+   ami_id: "test123" # specify if you know the specific AMI ID. If used, keep below os field empty (not that setting it would impact).
+   os: "ubuntu" # specify the OS. Supported values: ubuntu, centos, coreos. Keep above field empty if this is being used.
+   controlplane_instance_type: "t2.medium"
+   worker_instance_type: "t2.large"
    overlap_cp_etcd_worker: "true"
    overlap_node_pool:
       hostname_prefix: "cattle-aws-cluster"
@@ -144,8 +153,9 @@ Example `config.yaml`:
 
 ```bash
 cattle-aws:
-   request_spot_instances: # If you want to request spot instances. Set to true/false/empty
-   spot_price: # The spot instance price you want to bid. Ex. "0.75"
+   request_spot_instances: false
+   spot_price:
+   cloudwatch_monitoring: false
    root_disk_size: 20
    iam_instance_profile_name: "rancher-controlplane-role"
    iam_instance_profile_worker: # specify if overlap_cp_etcd_worker is false and existing_vpc is true
@@ -159,10 +169,10 @@ cattle-aws:
    vpc_id:
    subnet_id:
    security_group_name:
-   os: "ubuntu"
-   instance_type: "t2.medium"
-   aws_secret_access_key:
-   aws_default_region: "eu-central-1"
+   ami_id: "test123" # specify if you know the specific AMI ID. If used, keep below os field empty (not that setting it would impact).
+   os: "ubuntu" # specify the OS. Supported values: ubuntu, centos, coreos. Keep above field empty if this is being used.
+   controlplane_instance_type: "t2.medium"
+   worker_instance_type: "t2.large"
    overlap_cp_etcd_worker: "false"
    overlap_node_pool:
       hostname_prefix:
@@ -177,14 +187,13 @@ cattle-aws:
 
 ## Cattle AWS Deployment
 
-1. Donwload the latest binary based on your platform from here - https://github.com/kubernauts/tk8/releases
+1. Download the latest binary based on your platform from here - https://github.com/kubernauts/tk8/releases
 2. Set environment variables.
 3. Use a `config.yaml` from the above example.
 4. Run `tk8 cluster install cattle-aws`.
 
 ## Field Reference:
-
-* `request_spot_instances`: If you want to use spot instances for the cluster. Possible values: `true`,`false`. 
+* `request_spot_instances`: If you want to use spot instances for the cluster. Possible values: `true`,`false`. DO NOT keep this empty. Set it to false if spot instances are not required.
 
 * `spot_price`: The spot instance bidding price. For example: "0.75". Specify this along with `request_spot_instances` to use spot instances for the cluster.
 
@@ -216,7 +225,9 @@ cattle-aws:
 
 * `os`: (Mandatory) Operating System. The operating system you want to use for instances.
 
-* `instance_type`: (Mandatory) Instance type. The instance type which should be used to provision instances via Rancher.
+* `controlplane_instance_type`: (Mandatory) Instance type for controlplane nodes. The instance type which should be used to provision controlplane nodes via Rancher. Note that in case of overlapped controlplane, etcd and worker, this field will be used. `worker_instance_type` will only be used in case of non-overlapped node pools for separate workers.
+
+* `worker_instance_type`: (Optional) Instance type for worker nodes. This field should be specified when you want separate controlplane and worker node pools.
 
 * `overlap_cp_etcd_worker`: (Mandatory) If the cluster going to be an overlapped one. This means all instances will have the roles: Control Plane, Etcd, and Worker. This is similar to checkmark all the options via Rancher GUI while setting up node pools. The possible values for this field are boolean values: `true` and `false`.
 
@@ -237,8 +248,11 @@ cattle-aws:
     * `hostname_prefix`: (Required). This field is required to be set if you want to create an overlapped node pool. The hostname prefix’s value can be any `string`.
 
     * `quantity`: (Required). This field is required to be set if you want to create an overlapped node pool. The possible value for this field is of `numeric` type. 	
-    
-    
+
+* `cloudwatch_monitoring`: (Mandatory). This is field is required to be set. This field determines if cloudwatch monitoring should be enabled for the instances. The field type is `boolean` and the possible values are `true` and `false`. Please don't keep it empty.
+
+* `ami_id`: (Optional). Set this field if you want to use a specific AMI ID for creating instances in the cluster. It normally makes sense to keep `os` field empty while using this.
+
 ## Spot Instance Usage Caveats:
 While the use of spot instances is possible, TK8 uses the following conventions on where the spot instances will be used if `request_spot_instances` and `spot_price` are set:
 
