@@ -163,7 +163,7 @@ resource "rancher2_node_template" "rancher_worker_existing_vpc_no_overlap" {
     region                = var.region
     security_group        = [var.security_group_name]
     subnet_id             = var.subnet_id
-    vpc_id                = var.instance_type
+    vpc_id                = var.vpc_id
     zone                  = ""
     request_spot_instance = var.request_spot_instances
     spot_price            = var.spot_price
