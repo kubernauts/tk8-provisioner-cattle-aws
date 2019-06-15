@@ -24,14 +24,15 @@ resource "rancher2_node_template" "rancher_existing_vpc" {
   engine_install_url  = "https://releases.rancher.com/install-docker/18.09.sh"
 
   amazonec2_config {
-    ami                  = data.aws_ami.distro.id
+    monitoring           = var.cloudwatch_monitoring
+    ami                  = var.ami_id == "" ? data.aws_ami.distro.id : var.ami_id
     region               = var.region
     security_group       = [var.security_group_name]
     subnet_id            = var.subnet_id
     vpc_id               = var.vpc_id
     zone                 = ""
     iam_instance_profile = var.iam_instance_profile_name
-    instance_type        = var.instance_type
+    instance_type        = var.controlplane_instance_type
     root_size            = var.root_disk_size
   }
 }
@@ -45,15 +46,15 @@ resource "rancher2_node_template" "rancher_no_existing_vpc" {
   engine_install_url  = "https://releases.rancher.com/install-docker/18.09.sh"
 
   amazonec2_config {
-    ami    = data.aws_ami.distro.id
-    region = var.region
-
+    monitoring           = var.cloudwatch_monitoring
+    ami                  = var.ami_id == "" ? data.aws_ami.distro.id : var.ami_id
+    region               = var.region
     security_group       = [aws_security_group.rancher_security_group[count.index].name]
     subnet_id            = aws_subnet.rancher-subnet[count.index].id
     vpc_id               = aws_vpc.rancher-vpc[count.index].id
     zone                 = ""
     iam_instance_profile = aws_iam_instance_profile.rancher_controlplane_profile[count.index].name
-    instance_type        = var.instance_type
+    instance_type        = var.controlplane_instance_type
     root_size            = var.root_disk_size
   }
 }
@@ -66,7 +67,8 @@ resource "rancher2_node_template" "rancher_overlap_spot" {
   engine_install_url  = "https://releases.rancher.com/install-docker/18.09.sh"
 
   amazonec2_config {
-    ami                   = data.aws_ami.distro.id
+    monitoring            = var.cloudwatch_monitoring
+    ami                   = var.ami_id == "" ? data.aws_ami.distro.id : var.ami_id
     region                = var.region
     security_group        = [var.security_group_name]
     subnet_id             = var.subnet_id
@@ -75,7 +77,7 @@ resource "rancher2_node_template" "rancher_overlap_spot" {
     request_spot_instance = var.request_spot_instances
     spot_price            = var.spot_price
     iam_instance_profile  = var.iam_instance_profile_name
-    instance_type         = var.instance_type
+    instance_type         = var.controlplane_instance_type
     root_size             = var.root_disk_size
   }
 }
@@ -88,9 +90,9 @@ resource "rancher2_node_template" "rancher_no_existing_vpc_spot" {
   engine_install_url  = "https://releases.rancher.com/install-docker/18.09.sh"
 
   amazonec2_config {
-    ami    = data.aws_ami.distro.id
-    region = var.region
-
+    monitoring            = var.cloudwatch_monitoring
+    ami                   = var.ami_id == "" ? data.aws_ami.distro.id : var.ami_id
+    region                = var.region
     security_group        = [aws_security_group.rancher_security_group[count.index].name]
     subnet_id             = aws_subnet.rancher-subnet[count.index].id
     vpc_id                = aws_vpc.rancher-vpc[count.index].id
@@ -98,18 +100,17 @@ resource "rancher2_node_template" "rancher_no_existing_vpc_spot" {
     request_spot_instance = var.request_spot_instances
     spot_price            = var.spot_price
     iam_instance_profile  = aws_iam_instance_profile.rancher_controlplane_profile[count.index].name
-    instance_type         = var.instance_type
+    instance_type         = var.controlplane_instance_type
     root_size             = var.root_disk_size
   }
 }
 
 # Create a new rancher2 overlapped Node Pool if overlap_cp_etcd_worker is set
 resource "rancher2_node_pool" "rancher_overlap" {
-  count           = var.overlap_cp_etcd_worker && var.existing_vpc ? 1 : 0
-  cluster_id      = rancher2_cluster.rancher-custom.id
-  name            = "${var.rancher_cluster_name}-node-pool"
-  hostname_prefix = var.overlap_node_pool_hostname_prefix
-
+  count            = var.overlap_cp_etcd_worker && var.existing_vpc ? 1 : 0
+  cluster_id       = rancher2_cluster.rancher-custom.id
+  name             = "${var.rancher_cluster_name}-node-pool"
+  hostname_prefix  = var.overlap_node_pool_hostname_prefix
   node_template_id = rancher2_node_template.rancher_overlap_spot[count.index]
   quantity         = var.overlap_node_pool_quantity
   control_plane    = true
@@ -118,11 +119,10 @@ resource "rancher2_node_pool" "rancher_overlap" {
 }
 
 resource "rancher2_node_pool" "rancher_overlap_no_existing_vpc" {
-  count           = var.overlap_cp_etcd_worker && ! var.existing_vpc ? 1 : 0
-  cluster_id      = rancher2_cluster.rancher-custom.id
-  name            = "${var.rancher_cluster_name}-node-pool"
-  hostname_prefix = var.overlap_node_pool_hostname_prefix
-
+  count            = var.overlap_cp_etcd_worker && ! var.existing_vpc ? 1 : 0
+  cluster_id       = rancher2_cluster.rancher-custom.id
+  name             = "${var.rancher_cluster_name}-node-pool"
+  hostname_prefix  = var.overlap_node_pool_hostname_prefix
   node_template_id = rancher2_node_template.rancher_no_existing_vpc_spot[count.index].id
   quantity         = var.overlap_node_pool_quantity
   control_plane    = true
@@ -138,7 +138,8 @@ resource "rancher2_node_template" "rancher_worker_no_existing_vpc_no_overlap" {
   engine_install_url  = "https://releases.rancher.com/install-docker/18.09.sh"
 
   amazonec2_config {
-    ami                   = data.aws_ami.distro.id
+    monitoring            = var.cloudwatch_monitoring
+    ami                   = var.ami_id == "" ? data.aws_ami.distro.id : var.ami_id
     region                = var.region
     security_group        = [aws_security_group.rancher_security_group[count.index].name]
     subnet_id             = aws_subnet.rancher-subnet[count.index].id
@@ -147,7 +148,7 @@ resource "rancher2_node_template" "rancher_worker_no_existing_vpc_no_overlap" {
     request_spot_instance = var.request_spot_instances
     spot_price            = var.spot_price
     iam_instance_profile  = aws_iam_instance_profile.rancher_worker_profile[count.index].name
-    instance_type         = var.instance_type
+    instance_type         = var.worker_instance_type
   }
 }
 
@@ -159,7 +160,8 @@ resource "rancher2_node_template" "rancher_worker_existing_vpc_no_overlap" {
   engine_install_url  = "https://releases.rancher.com/install-docker/18.09.sh"
 
   amazonec2_config {
-    ami                   = data.aws_ami.distro.id
+    monitoring            = var.cloudwatch_monitoring
+    ami                   = var.ami_id == "" ? data.aws_ami.distro.id : var.ami_id
     region                = var.region
     security_group        = [var.security_group_name]
     subnet_id             = var.subnet_id
@@ -168,7 +170,7 @@ resource "rancher2_node_template" "rancher_worker_existing_vpc_no_overlap" {
     request_spot_instance = var.request_spot_instances
     spot_price            = var.spot_price
     iam_instance_profile  = aws_iam_instance_profile.rancher_worker_profile[count.index].name
-    instance_type         = var.instance_type
+    instance_type         = var.worker_instance_type
   }
 }
 

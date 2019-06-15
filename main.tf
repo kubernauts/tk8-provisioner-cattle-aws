@@ -13,7 +13,8 @@ module "cattle-aws" {
   subnet_id                                  = var.subnet_id
   security_group_name                        = var.security_group_name
   os                                         = var.os
-  instance_type                              = var.instance_type
+  controlplane_instance_type                 = var.controlplane_instance_type
+  worker_instance_type                       = var.worker_instance_type
   overlap_cp_etcd_worker                     = var.overlap_cp_etcd_worker
   no_overlap_nodepool_master_quantity        = var.no_overlap_nodepool_master_quantity
   no_overlap_nodepool_worker_quantity        = var.no_overlap_nodepool_worker_quantity
@@ -29,5 +30,7 @@ module "cattle-aws" {
   root_disk_size                             = var.root_disk_size
   request_spot_instances                     = var.request_spot_instances
   spot_price                                 = var.spot_price
+  ami_id                                     = var.ami_id
+  cloudwatch_monitoring                      = var.cloudwatch_monitoring
 }
 
