@@ -138,6 +138,11 @@ func Upgrade() {
 			log.Fatal("No terraform.tfstate file found. Upgrade can only be done on an existing cluster.")
 		}
 	}
+
+	cattleAWSSSHUser, cattleAWSOSLabel := cattleAWSDistSelect()
+	fmt.Printf("Prepairing Setup for user %s on %s\n", cattleAWSSSHUser, cattleAWSOSLabel)
+	cattleAWSPrepareConfigFiles(cattleAWSOSLabel, common.Name)
+	
 	log.Println("Starting Upgrade of the existing cluster")
 	terrSet := exec.Command("terraform", "apply", "-auto-approve")
 	terrSet.Dir = "./inventory/" + common.Name + "/provisioner/"
