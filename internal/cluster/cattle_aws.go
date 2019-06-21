@@ -7,6 +7,7 @@ import (
 	"os/exec"
 
 	"bufio"
+
 	"github.com/kubernauts/tk8/pkg/common"
 	"github.com/kubernauts/tk8/pkg/provisioner"
 	"github.com/kubernauts/tk8/pkg/templates"
@@ -81,8 +82,16 @@ func cattleAWSPrepareConfigFiles(InstanceOS string, Name string) {
 
 // Install is used to setup the Kubernetes Cluster with RKE
 func Install() {
-	os.MkdirAll("./inventory/"+common.Name+"/provisioner/modules/cattle-aws", 0755)
-	exec.Command("cp", "-rfp", "./provisioner/cattle-aws/", "./inventory/"+common.Name+"/provisioner").Run()
+	//os.MkdirAll("./inventory/"+common.Name+"/provisioner/modules/cattle-aws", 0755)
+
+	//exec.Command("cp", "-rfp", "./provisioner/cattle-aws/", "./inventory/"+common.Name+"/provisioner").Run()
+
+	err := common.CopyDir("./provisioner/cattle-aws", "./inventory/"+common.Name+"/provisioner")
+
+	if err != nil {
+		fmt.Printf("The copy operation failed %q\n", err)
+	}
+
 	cattleAWSSSHUser, cattleAWSOSLabel := cattleAWSDistSelect()
 	fmt.Printf("Prepairing Setup for user %s on %s\n", cattleAWSSSHUser, cattleAWSOSLabel)
 	cattleAWSPrepareConfigFiles(cattleAWSOSLabel, common.Name)
