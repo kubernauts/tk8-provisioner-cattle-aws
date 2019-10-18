@@ -53,6 +53,7 @@ cattle-aws:
    rke_network_plugin: "canal"
    region: "eu-central-1"
    existing_vpc: "true"
+   vpc_cidr_block: # No need to specify CIDR block for existing VPC
    vpc_id: "vpc-1abcdgggga72a691a"
    subnet_id: "subnet-1f98d368767ge1e71"
    security_group_name: "rancher-nodes"
@@ -92,6 +93,7 @@ cattle-aws:
    rke_network_plugin: "canal"
    region: "eu-central-1"
    existing_vpc: "true"
+   vpc_cidr_block: # No need to specify CIDR block in case of existing VPC
    vpc_id: "vpc-1abcdgggga72a691a"
    subnet_id: "subnet-1f98d368767ge1e71"
    security_group_name: "rancher-nodes"
@@ -131,6 +133,7 @@ cattle-aws:
    rke_network_plugin: "canal"
    region: "eu-central-1"
    existing_vpc: "false"
+   vpc_cidr_block: "10.0.0.0/16" # Specify CIDR block with new VPC
    vpc_id:
    subnet_id:
    security_group_name:
@@ -170,6 +173,7 @@ cattle-aws:
    rke_network_plugin: "canal"
    region: "eu-central-1"
    existing_vpc: "false"
+   vpc_cidr_block: "10.0.0.0/16" # Specify CIDR block with new VPC
    vpc_id:
    subnet_id:
    security_group_name:
@@ -224,6 +228,8 @@ cattle-aws:
 * `existing_vpc`: (Optional) Specify this if you want to create the cluster in existing VPC. Else, keep it blank. The possible values for this field are boolean values: true and false.
 
 * `vpc_id`: (Optional) VPC ID. Specify if you want to create the cluster in existing VPC.
+
+* `vpc_cidr_block`: (Optional) VPC CIDR block for creating the VPC with the provisioner.
 
 * `subnet_id`: (Optional) Subnet ID. Specify if you want to create the cluster in existing VPC.
 

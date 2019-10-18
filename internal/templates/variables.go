@@ -12,6 +12,12 @@ variable "zone" {
   type        = "string"
 }
 
+variable "vpc_cidr_block" {
+  default     = "{{.VpcCidrBlock}}"
+  description = "VPC CIDR block for creating VPC with the provisioner"
+  type        = "string"
+}
+
 variable "ssh_user" {
   default     = "{{.SshUser}}"
   description = "SSH user"

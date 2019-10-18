@@ -44,6 +44,7 @@ type CattleAWSConfig struct {
 	CloudwatchMonitoring     bool
 	SshUser                  string
 	Zone                     string
+	VpcCidrBlock             string
 }
 
 func GetCattleAWSConfig() CattleAWSConfig {
@@ -78,6 +79,7 @@ func GetCattleAWSConfig() CattleAWSConfig {
 		CloudwatchMonitoring:     viper.GetBool("cattle-aws.cloudwatch_monitoring"),
 		SshUser:                  viper.GetString("cattle-aws.ssh_user"),
 		Zone:                     viper.GetString("cattle-aws.zone"),
+		VpcCidrBlock:             viper.GetString("cattle-aws.vpc_cidr_block"),
 	}
 }
 

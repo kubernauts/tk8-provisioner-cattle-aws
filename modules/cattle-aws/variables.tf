@@ -186,3 +186,8 @@ variable "zone" {
   description = "Zone. Ex - eu-central-1a"
   type        = "string"
 }
+
+variable "vpc_cidr_block" {
+  description = "CIDR block for creating VPC with the provisioner"
+  type        = "string"
+}
