@@ -34,5 +34,6 @@ module "cattle-aws" {
   cloudwatch_monitoring                      = var.cloudwatch_monitoring
   ssh_user                                   = var.ssh_user
   zone                                       = var.zone
+  vpc_cidr_block                             = var.vpc_cidr_block
 }
 
