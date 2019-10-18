@@ -7,6 +7,12 @@ variable "cloudwatch_monitoring" {
   type        = "string"
 }
 
+variable "ssh_user" {
+  default     = "{{.SshUser}}"
+  description = "SSH user"
+  type        = "string"
+}
+
 variable "ami_id" {
   default     = "{{.AmiID}}"
   description = "AMI ID for instances"

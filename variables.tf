@@ -168,3 +168,9 @@ variable "AWS_SECRET_ACCESS_KEY" {
 variable "AWS_DEFAULT_REGION" {
   description = "AWS default region"
 }
+
+variable "ssh_user" {
+  default     = ""
+  description = "SSH user"
+  type        = "string"
+}

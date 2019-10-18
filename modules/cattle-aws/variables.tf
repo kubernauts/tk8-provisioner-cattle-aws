@@ -176,3 +176,8 @@ variable "cloudwatch_monitoring" {
   description = "Enable/Disable cloudwatch monitoring for instances"
   type        = "string"
 }
+
+variable "ssh_user" {
+  description = "SSH user"
+  type        = "string"
+}

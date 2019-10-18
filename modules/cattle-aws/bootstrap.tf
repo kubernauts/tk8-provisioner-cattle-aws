@@ -15,17 +15,26 @@ resource "rancher2_cluster" "rancher-custom" {
   }
 }
 
+resource "random_string" "rancher_node_template_random" {
+  upper            = false
+  length           = 8
+  special          = false
+  override_special = "/@\" "
+}
+
+
 # Create a new rancher2 Node Template
 resource "rancher2_node_template" "rancher_existing_vpc" {
   count               = var.existing_vpc && ! var.request_spot_instances ? 1 : 0
-  name                = "${var.rancher_cluster_name}_node_template"
+  name                = "${var.rancher_cluster_name}_node_template_${random_string.rancher_node_template_random.result}}"
   description         = "${var.rancher_cluster_name}_node_template node template"
   cloud_credential_id = rancher2_cloud_credential.test.id
   engine_install_url  = "https://releases.rancher.com/install-docker/18.09.sh"
 
   amazonec2_config {
     monitoring           = var.cloudwatch_monitoring
-    ami                  = var.ami_id == "" ? data.aws_ami.distro.id : var.ami_id
+    ssh_user             = var.ssh_user
+    ami                  = var.ami_id
     region               = var.region
     security_group       = [var.security_group_name]
     subnet_id            = var.subnet_id
@@ -40,14 +49,15 @@ resource "rancher2_node_template" "rancher_existing_vpc" {
 # Create a new rancher2 Node Template
 resource "rancher2_node_template" "rancher_no_existing_vpc" {
   count               = ! var.existing_vpc && ! var.overlap_cp_etcd_worker ? 1 : 0
-  name                = "${var.rancher_cluster_name}_node_template"
+  name                = "${var.rancher_cluster_name}_node_template_${random_string.rancher_node_template_random.result}"
   description         = "${var.rancher_cluster_name}_node_template node template"
   cloud_credential_id = rancher2_cloud_credential.test.id
   engine_install_url  = "https://releases.rancher.com/install-docker/18.09.sh"
 
   amazonec2_config {
     monitoring           = var.cloudwatch_monitoring
-    ami                  = var.ami_id == "" ? data.aws_ami.distro.id : var.ami_id
+    ami                  = var.ami_id
+    ssh_user             = var.ssh_user
     region               = var.region
     security_group       = [aws_security_group.rancher_security_group[count.index].name]
     subnet_id            = aws_subnet.rancher-subnet[count.index].id
@@ -61,14 +71,15 @@ resource "rancher2_node_template" "rancher_no_existing_vpc" {
 
 resource "rancher2_node_template" "rancher_overlap_spot" {
   count               = var.existing_vpc && var.request_spot_instances && var.overlap_cp_etcd_worker ? 1 : 0
-  name                = "${var.rancher_cluster_name}_node_template"
+  name                = "${var.rancher_cluster_name}_node_template${random_string.rancher_node_template_random.result}"
   description         = "${var.rancher_cluster_name}_node_template node template"
   cloud_credential_id = rancher2_cloud_credential.test.id
   engine_install_url  = "https://releases.rancher.com/install-docker/18.09.sh"
 
   amazonec2_config {
     monitoring            = var.cloudwatch_monitoring
-    ami                   = var.ami_id == "" ? data.aws_ami.distro.id : var.ami_id
+    ami                   = var.ami_id
+    ssh_user              = var.ssh_user
     region                = var.region
     security_group        = [var.security_group_name]
     subnet_id             = var.subnet_id
@@ -84,15 +95,16 @@ resource "rancher2_node_template" "rancher_overlap_spot" {
 
 resource "rancher2_node_template" "rancher_no_existing_vpc_spot" {
   count               = ! var.existing_vpc && var.request_spot_instances && var.overlap_cp_etcd_worker ? 1 : 0
-  name                = "${var.rancher_cluster_name}_node_template"
+  name                = "${var.rancher_cluster_name}_node_template_spot_${random_string.rancher_node_template_random.result}"
   description         = "${var.rancher_cluster_name}_node_template node template"
   cloud_credential_id = rancher2_cloud_credential.test.id
   engine_install_url  = "https://releases.rancher.com/install-docker/18.09.sh"
 
   amazonec2_config {
     monitoring            = var.cloudwatch_monitoring
-    ami                   = var.ami_id == "" ? data.aws_ami.distro.id : var.ami_id
+    ami                   = var.ami_id
     region                = var.region
+    ssh_user              = var.ssh_user
     security_group        = [aws_security_group.rancher_security_group[count.index].name]
     subnet_id             = aws_subnet.rancher-subnet[count.index].id
     vpc_id                = aws_vpc.rancher-vpc[count.index].id
@@ -132,14 +144,15 @@ resource "rancher2_node_pool" "rancher_overlap_no_existing_vpc" {
 
 resource "rancher2_node_template" "rancher_worker_no_existing_vpc_no_overlap" {
   count               = ! var.overlap_cp_etcd_worker && ! var.existing_vpc ? 1 : 0
-  name                = "${var.rancher_cluster_name}_worker_node_template"
+  name                = "${var.rancher_cluster_name}_worker_node_template_${random_string.rancher_node_template_random.result}"
   description         = "${var.rancher_cluster_name}_worker_node_template node template"
   cloud_credential_id = rancher2_cloud_credential.test.id
   engine_install_url  = "https://releases.rancher.com/install-docker/18.09.sh"
 
   amazonec2_config {
     monitoring            = var.cloudwatch_monitoring
-    ami                   = var.ami_id == "" ? data.aws_ami.distro.id : var.ami_id
+    ami                   = var.ami_id
+    ssh_user              = var.ssh_user
     region                = var.region
     security_group        = [aws_security_group.rancher_security_group[count.index].name]
     subnet_id             = aws_subnet.rancher-subnet[count.index].id
@@ -154,14 +167,15 @@ resource "rancher2_node_template" "rancher_worker_no_existing_vpc_no_overlap" {
 
 resource "rancher2_node_template" "rancher_worker_existing_vpc_no_overlap" {
   count               = ! var.overlap_cp_etcd_worker && var.existing_vpc ? 1 : 0
-  name                = "${var.rancher_cluster_name}_worker_node_template"
+  name                = "${var.rancher_cluster_name}_worker_node_template_${random_string.rancher_node_template_random.result}"
   description         = "${var.rancher_cluster_name}_worker_node_template node template"
   cloud_credential_id = rancher2_cloud_credential.test.id
   engine_install_url  = "https://releases.rancher.com/install-docker/18.09.sh"
 
   amazonec2_config {
     monitoring            = var.cloudwatch_monitoring
-    ami                   = var.ami_id == "" ? data.aws_ami.distro.id : var.ami_id
+    ami                   = var.ami_id
+    ssh_user              = var.ssh_user
     region                = var.region
     security_group        = [var.security_group_name]
     subnet_id             = var.subnet_id
@@ -169,7 +183,7 @@ resource "rancher2_node_template" "rancher_worker_existing_vpc_no_overlap" {
     zone                  = ""
     request_spot_instance = var.request_spot_instances
     spot_price            = var.spot_price
-    iam_instance_profile  = aws_iam_instance_profile.rancher_worker_profile[count.index].name
+    iam_instance_profile  = var.iam_instance_profile_name_worker
     instance_type         = var.worker_instance_type
   }
 }
