@@ -55,8 +55,8 @@ cattle-aws:
    vpc_id: "vpc-1abcdgggga72a691a"
    subnet_id: "subnet-1f98d368767ge1e71"
    security_group_name: "rancher-nodes"
-   ami_id: "test123" # specify if you know the specific AMI ID. If used, keep below os field empty (not that setting it would impact).
-   os: "" # specify the OS. Supported values: ubuntu, centos, coreos. Keep above field empty if this is being used.
+   ami_id: "test123"  
+   ssh_user: "ubuntu"
    controlplane_instance_type: "t2.medium"
    worker_instance_type: "t2.large"
    overlap_cp_etcd_worker: "true"
@@ -82,7 +82,7 @@ cattle-aws:
    cloudwatch_monitoring: false
    root_disk_size: 20
    iam_instance_profile_name: "rancher-controlplane-role"
-   iam_instance_profile_worker: “rancher-worker-role”
+   iam_instance_profile_worker: "rancher-worker-role"
    rancher_cluster_name: "cattle-aws-cluster"
    rancher_api_url: "https://rancher.xyz.com/v3"
    rancher_access_key:
@@ -93,8 +93,8 @@ cattle-aws:
    vpc_id: "vpc-1abcdgggga72a691a"
    subnet_id: "subnet-1f98d368767ge1e71"
    security_group_name: "rancher-nodes"
-   ami_id: "test123" # specify if you know the specific AMI ID. If used, keep below os field empty (not that setting it would impact).
-   os: "ubuntu" # specify the OS. Supported values: ubuntu, centos, coreos. Keep above field empty if this is being used.
+   ami_id: "test123" 
+   ssh_user: "ubuntu"
    controlplane_instance_type: "t2.medium"
    worker_instance_type: "t2.large"
    overlap_cp_etcd_worker: "false"
@@ -105,7 +105,7 @@ cattle-aws:
       hostname_prefix:"cattle-aws-master"
       quantity: 1
    worker_node_pool:
-      Hostname_prefix: “cattle-aws-worker”
+      Hostname_prefix: "cattle-aws-worker"
       quantity: 1
 ```
 
@@ -131,8 +131,8 @@ cattle-aws:
    vpc_id:
    subnet_id:
    security_group_name:
-   ami_id: "test123" # specify if you know the specific AMI ID. If used, keep below os field empty (not that setting it would impact).
-   os: "ubuntu" # specify the OS. Supported values: ubuntu, centos, coreos. Keep above field empty if this is being used.
+   ami_id: "test123" 
+   ssh_user: "ubuntu"
    controlplane_instance_type: "t2.medium"
    worker_instance_type: "t2.large"
    overlap_cp_etcd_worker: "true"
@@ -169,8 +169,8 @@ cattle-aws:
    vpc_id:
    subnet_id:
    security_group_name:
-   ami_id: "test123" # specify if you know the specific AMI ID. If used, keep below os field empty (not that setting it would impact).
-   os: "ubuntu" # specify the OS. Supported values: ubuntu, centos, coreos. Keep above field empty if this is being used.
+   ami_id: "test123"
+   ssh_user: "ubuntu"
    controlplane_instance_type: "t2.medium"
    worker_instance_type: "t2.large"
    overlap_cp_etcd_worker: "false"

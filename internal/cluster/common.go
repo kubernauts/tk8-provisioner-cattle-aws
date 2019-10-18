@@ -42,6 +42,7 @@ type CattleAWSConfig struct {
 	ControlPlaneInstanceType string
 	AmiID                    string
 	CloudwatchMonitoring     bool
+	SshUser                  string
 }
 
 func GetCattleAWSConfig() CattleAWSConfig {
@@ -74,6 +75,7 @@ func GetCattleAWSConfig() CattleAWSConfig {
 		ControlPlaneInstanceType: viper.GetString("cattle-aws.controlplane_instance_type"),
 		AmiID:                    viper.GetString("cattle-aws.ami_id"),
 		CloudwatchMonitoring:     viper.GetBool("cattle-aws.cloudwatch_monitoring"),
+		SshUser:                  viper.GetString("cattle-aws.ssh_user"),
 	}
 }
 

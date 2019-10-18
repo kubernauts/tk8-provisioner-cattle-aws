@@ -32,5 +32,6 @@ module "cattle-aws" {
   spot_price                                 = var.spot_price
   ami_id                                     = var.ami_id
   cloudwatch_monitoring                      = var.cloudwatch_monitoring
+  ssh_user                                   = var.ssh_user
 }
 

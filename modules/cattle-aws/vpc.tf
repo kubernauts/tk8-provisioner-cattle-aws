@@ -7,32 +7,28 @@ resource "random_string" "cluster_id" {
 data "aws_availability_zones" "available" {}
 
 resource "aws_vpc" "rancher-vpc" {
-  count                = "${var.existing_vpc ? 0 : 1}"
+  count                = var.existing_vpc ? 0 : 1
   cidr_block           = "10.0.0.0/16"
   enable_dns_hostnames = true
 
-  tags = "${
-    map(
-      "Name", "${var.rancher_cluster_name}-rancher-vpc",
-      "kubernetes.io/cluster/${random_string.cluster_id.result}", "owned",
-    )
-  }"
+  tags = map(
+    "Name", "${var.rancher_cluster_name}-rancher-vpc",
+    "kubernetes.io/cluster/${random_string.cluster_id.result}", "owned",
+  )
 }
 
 resource "aws_subnet" "rancher-subnet" {
-  count = "${var.existing_vpc ? 0 : 1}"
+  count = var.existing_vpc ? 0 : 1
 
   #count = 1
 
-  availability_zone = "${data.aws_availability_zones.available.names[count.index]}"
+  availability_zone = data.aws_availability_zones.available.names[count.index]
   cidr_block        = "10.0.${count.index}.0/24"
   vpc_id            = aws_vpc.rancher-vpc[count.index].id
-  tags = "${
-    map(
-      "Name", "${var.rancher_cluster_name}-rancher",
-      "kubernetes.io/cluster/${random_string.cluster_id.result}", "owned",
-    )
-  }"
+  tags = map(
+    "Name", "${var.rancher_cluster_name}-rancher",
+    "kubernetes.io/cluster/${random_string.cluster_id.result}", "owned",
+  )
 }
 
 resource "aws_internet_gateway" "rancher-ig" {
