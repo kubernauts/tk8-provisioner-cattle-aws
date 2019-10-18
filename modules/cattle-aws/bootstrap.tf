@@ -33,13 +33,13 @@ resource "rancher2_node_template" "rancher_existing_vpc" {
 
   amazonec2_config {
     monitoring           = var.cloudwatch_monitoring
+    zone                 = var.zone
     ssh_user             = var.ssh_user
     ami                  = var.ami_id
     region               = var.region
     security_group       = [var.security_group_name]
     subnet_id            = var.subnet_id
     vpc_id               = var.vpc_id
-    zone                 = ""
     iam_instance_profile = var.iam_instance_profile_name
     instance_type        = var.controlplane_instance_type
     root_size            = var.root_disk_size
@@ -56,13 +56,13 @@ resource "rancher2_node_template" "rancher_no_existing_vpc" {
 
   amazonec2_config {
     monitoring           = var.cloudwatch_monitoring
+    zone                 = var.zone
     ami                  = var.ami_id
     ssh_user             = var.ssh_user
     region               = var.region
     security_group       = [aws_security_group.rancher_security_group[count.index].name]
     subnet_id            = aws_subnet.rancher-subnet[count.index].id
     vpc_id               = aws_vpc.rancher-vpc[count.index].id
-    zone                 = ""
     iam_instance_profile = aws_iam_instance_profile.rancher_controlplane_profile[count.index].name
     instance_type        = var.controlplane_instance_type
     root_size            = var.root_disk_size
@@ -78,13 +78,13 @@ resource "rancher2_node_template" "rancher_overlap_spot" {
 
   amazonec2_config {
     monitoring            = var.cloudwatch_monitoring
+    zone                  = var.zone
     ami                   = var.ami_id
     ssh_user              = var.ssh_user
     region                = var.region
     security_group        = [var.security_group_name]
     subnet_id             = var.subnet_id
     vpc_id                = var.vpc_id
-    zone                  = ""
     request_spot_instance = var.request_spot_instances
     spot_price            = var.spot_price
     iam_instance_profile  = var.iam_instance_profile_name
@@ -102,13 +102,13 @@ resource "rancher2_node_template" "rancher_no_existing_vpc_spot" {
 
   amazonec2_config {
     monitoring            = var.cloudwatch_monitoring
+    zone                  = var.zone
     ami                   = var.ami_id
     region                = var.region
     ssh_user              = var.ssh_user
     security_group        = [aws_security_group.rancher_security_group[count.index].name]
     subnet_id             = aws_subnet.rancher-subnet[count.index].id
     vpc_id                = aws_vpc.rancher-vpc[count.index].id
-    zone                  = ""
     request_spot_instance = var.request_spot_instances
     spot_price            = var.spot_price
     iam_instance_profile  = aws_iam_instance_profile.rancher_controlplane_profile[count.index].name
@@ -151,13 +151,13 @@ resource "rancher2_node_template" "rancher_worker_no_existing_vpc_no_overlap" {
 
   amazonec2_config {
     monitoring            = var.cloudwatch_monitoring
+    zone                  = var.zone
     ami                   = var.ami_id
     ssh_user              = var.ssh_user
     region                = var.region
     security_group        = [aws_security_group.rancher_security_group[count.index].name]
     subnet_id             = aws_subnet.rancher-subnet[count.index].id
     vpc_id                = aws_vpc.rancher-vpc[count.index].id
-    zone                  = ""
     request_spot_instance = var.request_spot_instances
     spot_price            = var.spot_price
     iam_instance_profile  = aws_iam_instance_profile.rancher_worker_profile[count.index].name
@@ -174,13 +174,13 @@ resource "rancher2_node_template" "rancher_worker_existing_vpc_no_overlap" {
 
   amazonec2_config {
     monitoring            = var.cloudwatch_monitoring
+    zone                  = var.zone
     ami                   = var.ami_id
     ssh_user              = var.ssh_user
     region                = var.region
     security_group        = [var.security_group_name]
     subnet_id             = var.subnet_id
     vpc_id                = var.vpc_id
-    zone                  = ""
     request_spot_instance = var.request_spot_instances
     spot_price            = var.spot_price
     iam_instance_profile  = var.iam_instance_profile_name_worker

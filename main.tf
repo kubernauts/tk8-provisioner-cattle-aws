@@ -33,5 +33,6 @@ module "cattle-aws" {
   ami_id                                     = var.ami_id
   cloudwatch_monitoring                      = var.cloudwatch_monitoring
   ssh_user                                   = var.ssh_user
+  zone                                       = var.zone
 }
 

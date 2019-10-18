@@ -6,6 +6,11 @@ variable "cloudwatch_monitoring" {
   description = "Enable/Disable cloudwatch monitoring"
   type        = "string"
 }
+variable "zone" {
+  default     = "{{.Zone}}"
+  description = "Zone. Ex - eu-central-1a"
+  type        = "string"
+}
 
 variable "ssh_user" {
   default     = "{{.SshUser}}"
