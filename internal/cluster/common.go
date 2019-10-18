@@ -43,6 +43,7 @@ type CattleAWSConfig struct {
 	AmiID                    string
 	CloudwatchMonitoring     bool
 	SshUser                  string
+	Zone                     string
 }
 
 func GetCattleAWSConfig() CattleAWSConfig {
@@ -76,6 +77,7 @@ func GetCattleAWSConfig() CattleAWSConfig {
 		AmiID:                    viper.GetString("cattle-aws.ami_id"),
 		CloudwatchMonitoring:     viper.GetBool("cattle-aws.cloudwatch_monitoring"),
 		SshUser:                  viper.GetString("cattle-aws.ssh_user"),
+		Zone:                     viper.GetString("cattle-aws.zone"),
 	}
 }
 

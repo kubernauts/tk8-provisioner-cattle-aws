@@ -181,3 +181,8 @@ variable "ssh_user" {
   description = "SSH user"
   type        = "string"
 }
+
+variable "zone" {
+  description = "Zone. Ex - eu-central-1a"
+  type        = "string"
+}
