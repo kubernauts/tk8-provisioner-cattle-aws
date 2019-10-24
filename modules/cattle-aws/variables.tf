@@ -46,11 +46,6 @@ variable "security_group_name" {
   type        = "string"
 }
 
-variable "os" {
-  description = "os name"
-  type        = "string"
-}
-
 variable "worker_instance_type" {
   description = "Instance type"
   type        = "string"

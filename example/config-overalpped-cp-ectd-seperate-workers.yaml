@@ -1,6 +1,8 @@
 cattle-aws:
    request_spot_instances: false
    spot_price:
+   zone: "eu-central-1a"
+   cloudwatch_monitoring: false
    root_disk_size: 20
    iam_instance_profile_name: "rancher-controlplane-role"
    iam_instance_profile_worker: # specify if overlap_cp_etcd_worker is false and existing_vpc is true
@@ -10,21 +12,22 @@ cattle-aws:
    rancher_secret_key:
    rke_network_plugin: "canal"
    region: "eu-central-1"
-   existing_vpc: "false"
-   vpc_id:
-   subnet_id:
-   security_group_name:
-   os: "ubuntu"
-   instance_type: "t2.medium"
-   aws_secret_access_key:
-   aws_default_region: "eu-central-1"
-   overlap_cp_etcd_worker: "false"
+   existing_vpc: "true"
+   vpc_cidr_block: # No need to specify CIDR block for existing VPC
+   vpc_id: "vpc-1abcdgggga72a691a"
+   subnet_id: "subnet-1f98d368767ge1e71"
+   security_group_name: "rancher-nodes"
+   ami_id: "test123"
+   ssh_user: "ubuntu"
+   controlplane_instance_type: "t2.medium"
+   worker_instance_type: "t2.large"
+   overlap_cp_etcd_worker: "true"
    overlap_node_pool:
+      hostname_prefix: "cattle-aws-cluster"
+      quantity: 1
+   master_node_pool:
       hostname_prefix:
       quantity:
-   master_node_pool:
-      hostname_prefix: "cattle-aws-master"
-      quantity: 1
    worker_node_pool:
-      hostname_prefix: "cattle-aws-worker"
-      quantity: 1
+      hostname_prefix:
+      quantity:

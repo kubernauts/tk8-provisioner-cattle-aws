@@ -25,7 +25,6 @@ type CattleAWSConfig struct {
 	VPCID                    string
 	SubnetID                 string
 	SecurityGroupName        string
-	OS                       string
 	WorkerInstanceType       string
 	OverlapCpEtcdWorker      bool
 	OverlapHostnamePrefix    string
@@ -60,7 +59,6 @@ func GetCattleAWSConfig() CattleAWSConfig {
 		VPCID:                    viper.GetString("cattle-aws.vpc_id"),
 		SubnetID:                 viper.GetString("cattle-aws.subnet_id"),
 		SecurityGroupName:        viper.GetString("cattle-aws.security_group_name"),
-		OS:                       viper.GetString("cattle-aws.os"),
 		WorkerInstanceType:       viper.GetString("cattle-aws.worker_instance_type"),
 		OverlapCpEtcdWorker:      viper.GetBool("cattle-aws.overlap_cp_etcd_worker"),
 		OverlapHostnamePrefix:    viper.GetString("cattle-aws.overlap_node_pool.hostname_prefix"),
