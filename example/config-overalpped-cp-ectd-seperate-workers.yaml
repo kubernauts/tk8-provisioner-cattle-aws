@@ -1,7 +1,7 @@
 cattle-aws:
    request_spot_instances: false
    spot_price:
-   zone: "eu-central-1a"
+   zone: "a"
    cloudwatch_monitoring: false
    root_disk_size: 20
    iam_instance_profile_name: "rancher-controlplane-role"

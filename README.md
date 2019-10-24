@@ -41,7 +41,7 @@ Example `config.yaml`:
 cattle-aws:
    request_spot_instances: false
    spot_price:
-   zone: "eu-central-1a"
+   zone: "a"
    cloudwatch_monitoring: false
    root_disk_size: 20
    iam_instance_profile_name: "rancher-controlplane-role"
@@ -80,7 +80,7 @@ Example `config.yaml`:
 ```bash
 cattle-aws:
    request_spot_instances: false
-   zone: "eu-central-1a"
+   zone: "a"
    spot_price:
    cloudwatch_monitoring: false
    root_disk_size: 20
@@ -120,7 +120,7 @@ Example `config.yaml`:
 ```bash
 cattle-aws:
    request_spot_instances: false
-   zone: "eu-central-1a"
+   zone: "a"
    spot_price:
    cloudwatch_monitoring: false
    root_disk_size: 20
@@ -160,7 +160,7 @@ Example `config.yaml`:
 ```bash
 cattle-aws:
    request_spot_instances: false
-   zone: "eu-central-1a"
+   zone: "a"
    spot_price:
    cloudwatch_monitoring: false
    root_disk_size: 20
@@ -203,7 +203,7 @@ cattle-aws:
 ## Field Reference:
 * `request_spot_instances`: If you want to use spot instances for the cluster. Possible values: `true`,`false`. DO NOT keep this empty. Set it to false if spot instances are not required.
 
-* `zone`: (Optional) The zone in which you want to launch your instances. For example, `eu-central-1a`. If not specified, Rancher will automatically choose a zone.
+* `zone`: (Optional) The zone in which you want to launch your instances. For example, `a`. This means, the instance will be launched in `region``zone` - eu-central-1a. If not specified, Rancher will automatically choose a zone.
 
 * `spot_price`: The spot instance bidding price. For example: "0.75". Specify this along with `request_spot_instances` to use spot instances for the cluster.
 
