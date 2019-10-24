@@ -12,7 +12,6 @@ module "cattle-aws" {
   vpc_id                                     = var.vpc_id
   subnet_id                                  = var.subnet_id
   security_group_name                        = var.security_group_name
-  os                                         = var.os
   controlplane_instance_type                 = var.controlplane_instance_type
   worker_instance_type                       = var.worker_instance_type
   overlap_cp_etcd_worker                     = var.overlap_cp_etcd_worker

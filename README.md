@@ -198,7 +198,7 @@ cattle-aws:
 1. Download the latest binary based on your platform from here - https://github.com/kubernauts/tk8/releases
 2. Set environment variables.
 3. Use a `config.yaml` from the above example.
-4. Run `tk8 cluster install cattle-aws`.
+4. Run `tk8ctl cluster install cattle-aws`.
 
 ## Field Reference:
 * `request_spot_instances`: If you want to use spot instances for the cluster. Possible values: `true`,`false`. DO NOT keep this empty. Set it to false if spot instances are not required.
@@ -234,8 +234,6 @@ cattle-aws:
 * `subnet_id`: (Optional) Subnet ID. Specify if you want to create the cluster in existing VPC.
 
 * `security_group_name`: (Optional) Security group name. Specify if you want to create the cluster in existing VPC.
-
-* `os`: (Mandatory) Operating System. The operating system you want to use for instances.
 
 * `controlplane_instance_type`: (Mandatory) Instance type for controlplane nodes. The instance type which should be used to provision controlplane nodes via Rancher. Note that in case of overlapped controlplane, etcd and worker, this field will be used. `worker_instance_type` will only be used in case of non-overlapped node pools for separate workers.
 

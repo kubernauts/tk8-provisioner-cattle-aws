@@ -123,12 +123,6 @@ variable "security_group_name" {
   type        = "string"
 }
 
-variable "os" {
-  default     = "{{.OS}}"
-  description = "ami id - frankfurt"
-  type        = "string"
-}
-
 variable "worker_instance_type" {
   default     = "{{.WorkerInstanceType}}"
   description = "Instance type"

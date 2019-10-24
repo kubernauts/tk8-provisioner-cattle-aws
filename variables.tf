@@ -103,12 +103,6 @@ variable "security_group_name" {
   type        = string
 }
 
-variable "os" {
-  default     = ""
-  description = "ami id - frankfurt"
-  type        = string
-}
-
 variable "worker_instance_type" {
   default     = ""
   description = "Instance type"
