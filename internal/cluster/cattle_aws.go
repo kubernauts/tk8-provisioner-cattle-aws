@@ -14,7 +14,11 @@ import (
 )
 
 func cattleAWSPrepareConfigFiles(Name string) {
-	templates.ParseTemplate(templates.VariablesCattleAWS, "./inventory/"+common.Name+"/provisioner/variables.tf", GetCattleAWSConfig())
+	if ConfigType == "noTemplate" {
+		templates.ParseTemplate(templates.VariablesCattleAWS, "./inventory/"+common.Name+"/provisioner/variables.tf", GetCattleAWSConfig())
+	} else {
+		templates.ParseTemplate(templates.VariablesCattleAWSTemplate, "./inventory/"+common.Name+"/provisioner/variables.tf", GetCattleAwsConfigTemplate())
+	}
 }
 
 // Install is used to setup the Kubernetes Cluster with RKE

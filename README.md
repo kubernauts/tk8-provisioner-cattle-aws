@@ -73,6 +73,27 @@ cattle-aws:
       quantity:
 ```
 
+```bash
+cattle-aws-rke-template:
+   create_rke_template: true
+   rke_template_name: test
+   rke_template_config:
+      description: "Test cluster config template"
+      members:
+         access_type: "owner"
+ 	 user_principal_id: "local://user-XXXXX"
+      template_revisions:
+         name: "v1"
+	 enable_template_revision: true
+      cluster_config:
+	 enable_cluster_alerting:
+	 enable_cluster_monitoring:
+	 enable_network_policy:	
+      rke_config:
+        
+	
+```
+
 Creating a cluster in existing VPC (overlapped controlplane, etcd and separate worker):
 
 Example `config.yaml`:

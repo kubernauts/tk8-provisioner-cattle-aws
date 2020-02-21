@@ -46,7 +46,33 @@ type CattleAWSConfig struct {
 	VpcCidrBlock             string
 }
 
+type CattleAwsConfigTemplate struct {
+	CreateRkeTemplate       bool
+	RkeTemplateName         string
+	TemplateDescription     string
+	MemberAccessType        string
+	UserPrincipalId         string
+	EnableTemplateRevision  bool
+	EnableClusterAlerting   bool
+	EnableClusterMonitoring bool
+}
+
+var ConfigType string
+
+func IdentifyConfig() string {
+	ReadViperConfigFile("config")
+	//var configType string
+	if viper.IsSet("cattle-aws-rke-template.rke_template_name") {
+		ConfigType = "template"
+		return ConfigType
+	} else {
+		ConfigType = "noTemplate"
+		return ConfigType
+	}
+}
+
 func GetCattleAWSConfig() CattleAWSConfig {
+
 	ReadViperConfigFile("config")
 	return CattleAWSConfig{
 		RancherClusterName:       viper.GetString("cattle-aws.rancher_cluster_name"),
@@ -81,10 +107,23 @@ func GetCattleAWSConfig() CattleAWSConfig {
 	}
 }
 
+func GetCattleAwsConfigTemplate() CattleAwsConfigTemplate {
+	return CattleAwsConfigTemplate{
+		CreateRkeTemplate: viper.GetBool("cattle-aws-rke-template.create_rke_template"),
+	}
+}
+
 func SetClusterName() {
 	if len(common.Name) < 1 {
-		config := GetCattleAWSConfig()
-		common.Name = config.RancherClusterName
+		switch IdentifyConfig() {
+		case "noTemplate":
+			config := GetCattleAWSConfig()
+			common.Name = config.RancherClusterName
+
+		case "template":
+			config := GetCattleAwsConfigTemplate()
+			common.Name = config.CreateRkeTemplate
+		}
 	}
 }
 
